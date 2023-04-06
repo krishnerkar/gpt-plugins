@@ -1,91 +1,126 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.css'
+"use client";
 
-const inter = Inter({ subsets: ['latin'] })
+/* eslint-disable @next/next/no-img-element */
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import PluginCard from "@/components/ui/PluginCard";
+import PluginCardSkeleton from "@/components/ui/PluginCardSkeleton";
+import { Separator } from "@/components/ui/Separator";
+import { SimplePlugin } from "@/pages/api/get";
+import { useEffect, useState } from "react";
+import { Toaster, toast } from "sonner";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import debounce from "@/lib/debounce";
 
 export default function Home() {
+  const [data, setData] = useState<SimplePlugin[]>();
+  const [loading, setLoading] = useState(false);
+
+  const [searchResults, setSearchResults] = useState<SimplePlugin[]>([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const fetchSearchResults = async (query: string) => {
+    if (query.trim() === "") {
+      setSearchResults([]);
+      return;
+    }
+    setSearchLoading(true);
+    const response = await fetch(`/api/search?q=${query}`);
+    const data = await response.json();
+    setSearchResults(data);
+    setSearchLoading(false);
+  };
+
+  const handleInputChange = debounce((e) => {
+    setSearchQuery(e.target.value);
+    setSearchLoading(true);
+    fetchSearchResults(e.target.value);
+  }, 300);
+
+  useEffect(() => {
+    if (!data) {
+      setLoading(true);
+      fetch("/api/get").then((res) => {
+        if (res.ok) {
+          res.json().then((data) => {
+            setData(data);
+          });
+        } else {
+          toast.error("Something went wrong");
+        }
+        setLoading(false);
+      });
+    }
+  }, [data]);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+    <>
+      <Navbar />
+
+      <main className="mx-auto max-w-7xl px-6 py-6 lg:px-8 w-full">
+        <form className="relative flex flex-1" action="#" method="GET">
+          <label htmlFor="search-field" className="sr-only">
+            Search
+          </label>
+          <MagnifyingGlassIcon
+            className="pointer-events-none absolute inset-y-0 left-4 h-full w-5 text-gray-400"
+            aria-hidden="true"
+          />
+          <div className="flex items-center w-full gap-6">
+            <input
+              onChange={handleInputChange}
+              id="search-field"
+              className="block bg-slate-100  h-full w-full border-0 py-4 rounded-md pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
+              placeholder={!data ? "" : `Search ${data?.length} plugins`}
+              disabled={!data}
+              type="search"
+              name="search"
             />
-          </a>
+            {/* {searchLoading && (
+              <div
+                className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                role="status"
+              >
+                <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                  Loading...
+                </span>
+              </div>
+            )} */}
+          </div>
+        </form>
+
+        <div className="mt-10 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 items-center">
+          {loading ? (
+            <>
+              <PluginCardSkeleton />
+              <PluginCardSkeleton />
+              <PluginCardSkeleton />
+            </>
+          ) : searchQuery.length > 0 ? (
+            searchResults?.map((plugin) => (
+              <PluginCard
+                key={plugin.id}
+                name={plugin.name}
+                description={plugin.description}
+                logo={plugin.logo}
+              />
+            ))
+          ) : (
+            data?.map((plugin) => (
+              <PluginCard
+                key={plugin.id}
+                name={plugin.name}
+                description={plugin.description}
+                logo={plugin.logo}
+              />
+            ))
+          )}
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+      </main>
+      <Toaster />
+      <Footer />
+    </>
+  );
 }
