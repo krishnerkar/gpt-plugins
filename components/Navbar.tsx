@@ -69,7 +69,6 @@ export default function Navbar() {
       </nav>
       <Dialog
         as="div"
-        // @ts-expect-error
         className="lg:hidden"
         open={mobileMenuOpen}
         onClose={setMobileMenuOpen}
