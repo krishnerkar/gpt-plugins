@@ -27,7 +27,7 @@ npm run dev
 
 👤 **Krish Nerkar**
 
-* Twitter: [@https:\/\/twitter.com\/krishnerkar](https://twitter.com/https:\/\/twitter.com\/krishnerkar)
+* Twitter: [@krishnerkar](https://twitter.com/krishnerkar)
 * Github: [@krishnerkar](https://github.com/krishnerkar)
 
 ## Show your support
