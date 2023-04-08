@@ -7,10 +7,9 @@ import Link from "next/link";
 import { useState } from "react";
 
 const navigation = [
-  // { name: "About", href: "#" },
-  // { name: "Search", href: "#" },
-  // { name: "Chat", href: "#" },
-  // { name: "API", href: "#" },
+  { name: "About", href: "/about" },
+  { name: "Chat", href: "/chat" },
+  { name: "API", href: "/api" },
 ];
 
 export default function Navbar() {
@@ -47,7 +46,7 @@ export default function Navbar() {
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-        {/* <div className="hidden lg:flex lg:gap-x-12">
+        <div className="hidden lg:flex lg:gap-x-12">
           {navigation.map((item) => (
             <a
               key={item.name}
@@ -57,7 +56,7 @@ export default function Navbar() {
               {item.name}
             </a>
           ))}
-        </div> */}
+        </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <Link
             href="/submit"
@@ -97,7 +96,7 @@ export default function Navbar() {
           </div>
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
-              {/* <div className="space-y-2 py-6">
+              <div className="space-y-2 py-6">
                 {navigation.map((item) => (
                   <a
                     key={item.name}
@@ -107,7 +106,7 @@ export default function Navbar() {
                     {item.name}
                   </a>
                 ))}
-              </div> */}
+              </div>
               <div className="py-6">
                 <Link
                   href="/submit"

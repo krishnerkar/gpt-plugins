@@ -40,11 +40,17 @@ export default async function handler(
   const manifest: AiPlugin = await manifestRaw.json();
 
   const openAPIUrl = manifest.api.url;
-  const openAPIRaw = await axios.get(openAPIUrl);
+  let openAPI;
 
-  const openAPI = isYAML(openAPIRaw.data)
-    ? YAML2JSON(openAPIRaw.data)
-    : openAPIRaw.data;
+  try {
+    const openAPIRaw = await axios.get(openAPIUrl);
+    openAPI = isYAML(openAPIRaw.data)
+      ? YAML2JSON(openAPIRaw.data)
+      : openAPIRaw.data;
+  } catch (error) {
+    console.error("Something went wrong fetching OpenAPI:", error);
+    openAPI = "";
+  }
 
   res.status(200).json({
     status: "success",
