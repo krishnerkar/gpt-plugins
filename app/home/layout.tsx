@@ -179,7 +179,7 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({
                 </div>
 
                 {!loading && (
-                  <div className="mt-8 w-full b">
+                  <div className="mt-8 w-full hidden sm:block">
                     <nav className="flex space-x-4" aria-label="Tabs">
                       {tabs.map((tab, index) => (
                         <a
