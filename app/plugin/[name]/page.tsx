@@ -33,7 +33,7 @@ export default function Plugin({ params }: { params: { name: string } }) {
       current: true,
       content: "",
     },
-    { name: "OpenAPI", href: "#", current: false, content: "OpenAPI content" },
+    { name: "OpenAPI", href: "#", current: false, content: "" },
   ]);
 
   useEffect(() => {

@@ -3,12 +3,16 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function About() {
   return (
     <div className="flex flex-col justify-between min-h-screen">
       <Navbar />
       <main className="isolate">
+        <Link href='/plugin/Medium'>
+          <h1>test</h1>
+        </Link>
         {/* Hero section */}
         <div className="relative isolate -z-10 overflow-hidden bg-gradient-to-b from-indigo-50/20 pt-14">
           <div
@@ -22,8 +26,16 @@ export default function About() {
               </h1>
               <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
                 <p className="text-lg leading-8 text-gray-600">
-                  GPT Plugins makes it extremely easy for you to find the best plugins for
-                  ChatGPT. Many more features are coming soon! Follow <a href="https://twitter.com/krishnerkar" className="underline">here</a> for updates.
+                  GPT Plugins makes it extremely easy for you to find the best
+                  plugins for ChatGPT. Many more features are coming soon!
+                  Follow{" "}
+                  <a
+                    href="https://twitter.com/krishnerkar"
+                    className="underline"
+                  >
+                    here
+                  </a>{" "}
+                  for updates.
                 </p>
               </div>
               <Image

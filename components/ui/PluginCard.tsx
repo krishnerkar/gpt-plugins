@@ -5,10 +5,12 @@ export default function PluginCard({
   name,
   description,
   logo,
+  handlePreviewModal,
 }: {
   name: string;
   description: string;
   logo: string;
+  handlePreviewModal: (name: string) => void;
 }) {
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const fallbackImageUrl = "/fallback.svg"; // Replace with your fallback image URL
@@ -17,7 +19,11 @@ export default function PluginCard({
 
   return (
     <div className="flex flex-col h-full justify-top hover:ring-gray-300 cursor-pointer ring ring-gray-100 ring-offset-4 bg-gray-50 px-6 py-6 rounded-md">
-      <Link href={`/plugin/${name}`}>
+      <Link
+        onClick={() => handlePreviewModal(name)}
+        href={`/plugin/${name}`}
+        shallow
+      >
         <img
           onError={handleImageError}
           src={logo}

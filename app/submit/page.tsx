@@ -15,7 +15,7 @@ export default function Add() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const response = await fetch("/api/submit/", {
+    const response = await fetch("/api/add/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
