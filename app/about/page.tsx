@@ -10,9 +10,6 @@ export default function About() {
     <div className="flex flex-col justify-between min-h-screen">
       <Navbar />
       <main className="isolate">
-        <Link href='/plugin/Medium'>
-          <h1>test</h1>
-        </Link>
         {/* Hero section */}
         <div className="relative isolate -z-10 overflow-hidden bg-gradient-to-b from-indigo-50/20 pt-14">
           <div
