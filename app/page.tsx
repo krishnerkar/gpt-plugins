@@ -1,13 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PluginCard from "@/components/ui/PluginCard";
 import PluginCardSkeleton from "@/components/ui/PluginCardSkeleton";
-import { Separator } from "@/components/ui/Separator";
 import { SimplePlugin } from "@/pages/api/get";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
