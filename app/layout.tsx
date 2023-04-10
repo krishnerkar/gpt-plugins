@@ -5,6 +5,20 @@ import { Analytics } from "@vercel/analytics/react";
 export const metadata = {
   title: "GPT Plugins",
   description: "A collection of all chatgpt plugins",
+  openGraph: {
+    title: "GPT Plugins",
+    description: "A collection of all chatgpt plugins",
+    type: "website",
+    url: "https://gpt-plugins.vercel.app/",
+    images: [
+      {
+        url: "https://gpt-plugins.vercel.app/og.png",
+        width: 1200,
+        height: 630,
+        alt: "GPT Plugins",
+      },
+    ],
+  },
 };
 
 const inter = Inter({ subsets: ["latin"] });

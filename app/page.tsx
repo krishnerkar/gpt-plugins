@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PluginCard from "@/components/ui/PluginCard";
@@ -101,7 +100,6 @@ export default function HomePage() {
           ) : searchQuery.length > 0 ? (
             searchResults?.map((plugin) => (
               <PluginCard
-                handlePreviewModal={handlePreviewModal}
                 key={plugin.id}
                 name={plugin.name}
                 description={plugin.description}
@@ -111,7 +109,6 @@ export default function HomePage() {
           ) : (
             data?.map((plugin) => (
               <PluginCard
-                handlePreviewModal={handlePreviewModal}
                 key={plugin.id}
                 name={plugin.name}
                 description={plugin.description}
