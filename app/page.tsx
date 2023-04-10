@@ -12,17 +12,7 @@ import { Toaster, toast } from "sonner";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import debounce from "@/lib/debounce";
 
-export interface HomeLayoutProps {
-  children: React.ReactNode;
-  modal: string | null;
-  isOpen: boolean;
-  closeModal: () => void;
-}
-
 export default function HomePage() {
-  const [previewModal, setPreviewModal] = useState<string | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-
   const [data, setData] = useState<SimplePlugin[]>();
   const [loading, setLoading] = useState(false);
 
@@ -30,23 +20,6 @@ export default function HomePage() {
   const [searchLoading, setSearchLoading] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
-
-  const router = useRouter();
-
-  useEffect(() => {
-    setPreviewModal(null);
-    setModalOpen(false);
-  }, []);
-
-  const handlePreviewModal = (name: string) => {
-    setPreviewModal(name);
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-    router.push("/home");
-  };
 
   const fetchSearchResults = async (query: string) => {
     if (query.trim() === "") {
