@@ -5,6 +5,13 @@ import { Analytics } from "@vercel/analytics/react";
 export const metadata = {
   title: "GPT Plugins",
   description: "A collection of all chatgpt plugins",
+  twitter: {
+    card: "summary_large_image",
+    title: "GPT Plugins",
+    description: "A collection of all chatgpt plugins",
+    creator: "@krishnerkar",
+    images: ["https://www.gptplugins.app/og.png"],
+  },
   openGraph: {
     title: "GPT Plugins",
     description: "A collection of all chatgpt plugins",
