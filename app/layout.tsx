@@ -9,10 +9,10 @@ export const metadata = {
     title: "GPT Plugins",
     description: "A collection of all chatgpt plugins",
     type: "website",
-    url: "https://gpt-plugins.vercel.app/",
+    url: "https://www.gptplugins.app/",
     images: [
       {
-        url: "https://gpt-plugins.vercel.app/og.png",
+        url: "https://www.gptplugins.app/og.png",
         width: 1200,
         height: 630,
         alt: "GPT Plugins",
