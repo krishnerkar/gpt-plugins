@@ -1,9 +1,5 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable @next/next/no-img-element */
-
 import PluginContent from "@/components/PluginContent";
-import { Result } from "@/pages/api/getByName";
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 
 type Props = {
   params: { name: string };
@@ -11,18 +7,12 @@ type Props = {
 
 export async function generateMetadata(
   { params }: Props,
-  parent?: ResolvingMetadata
 ): Promise<Metadata> {
   const name = params.name;
-  let description;
-  let logo;
 
   const plugin = await fetch(`https://www.gptplugins.app/api/getByName?name=${name}`).then((res) =>
     res.json()
   );
-
-  console.log(plugin);
-
   return {
     title: plugin.data.name,
     description: plugin.data.description,
