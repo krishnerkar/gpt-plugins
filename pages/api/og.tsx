@@ -28,7 +28,7 @@ export default async function handler(request: NextRequest) {
             width={10}
             height={10}
             tw="h-10 w-10 mb-8"
-            src={`${process.env.VERCEL_URL}/logo.png`}
+            src={`https://www.gptplugins.app/logo.png`}
           />
           <h1 tw="text-xl text-indigo-600 font-bold">gptplugins.app</h1>
           <h1 tw="mt-8 text-7xl font-black">{name}</h1>

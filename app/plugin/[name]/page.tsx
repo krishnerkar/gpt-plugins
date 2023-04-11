@@ -2,58 +2,55 @@
 /* eslint-disable @next/next/no-img-element */
 
 import PluginContent from "@/components/PluginContent";
-// import { Result } from "@/pages/api/getByName";
-// import { Metadata, ResolvingMetadata } from "next";
+import { Result } from "@/pages/api/getByName";
+import { Metadata, ResolvingMetadata } from "next";
 
-// type Props = {
-//   params: { name: string };
-// };
+type Props = {
+  params: { name: string };
+};
 
-// export async function generateMetadata(
-//   { params }: Props,
-//   parent?: ResolvingMetadata
-// ): Promise<Metadata> {
-//   const name = params.name;
+export async function generateMetadata(
+  { params }: Props,
+  parent?: ResolvingMetadata
+): Promise<Metadata> {
+  const name = params.name;
+  let description;
+  let logo;
 
-//   // fetch data
-//   let description;
-//   let logo
+  const plugin = await fetch(`https://www.gptplugins.app/api/getByName?name=${name}`).then((res) =>
+    res.json()
+  );
 
-//   fetch(`http://localhost:3005/api/getByName?name=${name}`).then((res) => {
-//     if (res.ok) {
-//       res.json().then((data: Result) => {
-//         if (data.error) {
-//           console.log(data.error);
-//           return;
-//         }
-//         if (!data.data) return;
-//       });
-//     } else {
-//       res.json().then((data: Result) => {
-//         if (data.error) {
-//           console.log(data.error);
-//           return;
-//         } else {
-//           console.log("Something went wrong");
-//         }
-//       });
-//     }
-//   });
+  console.log(plugin);
 
-//   // optionally access and extend (rather than replace) parent metadata
-//   const previousImages = (await parent)?.openGraph?.images || [];
-
-//   return {
-//     title: name,
-//     description: description,
-//     openGraph: {
-//       images: [
-//         `hhttp://localhost:3005/api/og?name=${name}&description=${description}&logo=${logo}`,
-//         ...previousImages,
-//       ],
-//     },
-//   };
-// }
+  return {
+    title: plugin.data.name,
+    description: plugin.data.description,
+    twitter: {
+      card: "summary_large_image",
+      title: plugin.data.name,
+      description: plugin.data.description,
+      creator: "@krishnerkar",
+      images: [
+        `https://www.gptplugins.app/api/og?name=${plugin.data.name}&description=${plugin.data.description}&logo=${plugin.data.logo}`,
+      ],
+    },
+    openGraph: {
+      title: plugin.data.name,
+      description: plugin.data.description,
+      type: "website",
+      url: "https://www.gptplugins.app/",
+      images: [
+        {
+          url: `https://www.gptplugins.app/api/og?name=${plugin.data.name}&description=${plugin.data.description}&logo=${plugin.data.logo}`,
+          width: 1200,
+          height: 630,
+          alt: "GPT Plugins",
+        },
+      ],
+    },
+  };
+}
 
 export default function Plugin({ params }: { params: { name: string } }) {
   return <PluginContent name={params.name} />;
