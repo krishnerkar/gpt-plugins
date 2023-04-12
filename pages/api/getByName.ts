@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prisma";
-import { SimplePlugin } from "./get";
+import { SimplePlugin } from "./getPlugins";
 
 export type Result = {
   data?: SimplePlugin | null;

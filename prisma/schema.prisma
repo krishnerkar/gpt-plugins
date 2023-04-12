@@ -16,16 +16,17 @@ model Plugin {
   description String
   logo        String
   url         String   @unique
+  approved    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-model PluginSubmissions {
+model OSPlugin{
   id          Int      @default(autoincrement()) @id
-  name        String
+  name        String   @unique
   description String
-  logo        String
-  url         String   
+  githubURL   String   @unique
+  approved    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

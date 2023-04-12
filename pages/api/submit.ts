@@ -9,6 +9,8 @@ type Data = {
 type Body = {
   name: string;
   url: string;
+  type: "hosted" | "open";
+  description?: string;
 };
 
 type Auth = {
@@ -40,26 +42,46 @@ export default async function handler(
   const body = req.body as Body;
   const url = body.url;
   const name = body.name;
+  const type = body.type;
 
-  const result = await fetch(url);
-  const data: AiPlugin = await result.json();
+  if (type === "hosted") {
+    try {
+      const result = await fetch(url);
+      const data: AiPlugin = await result.json();
 
-  const description = data.description_for_human;
-  const logo = data.logo_url;
-
-  try {
-    const plugin = await prisma.pluginSubmissions.create({
-      data: {
-        name: name,
-        description: description,
-        logo: logo,
-        url: url,
-      },
-    });
-    res.status(200).json({ status: "success", id: plugin.id });
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({ status: "error" });
-    return;
+      const description = data.description_for_human;
+      const logo = data.logo_url;
+      const plugin = await prisma.plugin.create({
+        data: {
+          name: name,
+          description: description,
+          logo: logo,
+          url: url,
+          approved: false,
+        },
+      });
+      res.status(200).json({ status: "success", id: plugin.id });
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({ status: "error" });
+      return;
+    }
+  } else {
+    try {
+      const description = body?.description || "";
+      const plugin = await prisma.oSPlugin.create({
+        data: {
+          name: name,
+          description: description,
+          githubURL: url,
+          approved: false,
+        },
+      });
+      res.status(200).json({ status: "success", id: plugin.id });
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({ status: "error" });
+      return;
+    }
   }
 }

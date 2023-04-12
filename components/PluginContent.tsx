@@ -3,7 +3,7 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import { SimplePlugin } from "@/pages/api/get";
+import { SimplePlugin } from "@/pages/api/getPlugins";
 import { Result } from "@/pages/api/getByName";
 import { useEffect, useState } from "react";
 import { toast, Toaster } from "sonner";
@@ -104,7 +104,7 @@ export default function PluginContent({ name }: { name: string }) {
         setLoading(false);
       });
     }
-  }, [data,name]);
+  }, [data, name]);
 
   return (
     <>

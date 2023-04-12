@@ -5,20 +5,48 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PluginCard from "@/components/ui/PluginCard";
 import PluginCardSkeleton from "@/components/ui/PluginCardSkeleton";
-import { SimplePlugin } from "@/pages/api/get";
+import { SimplePlugin } from "@/pages/api/getPlugins";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import debounce from "@/lib/debounce";
+import DevloperPluginCard from "@/components/ui/DeveloperPluginCard";
+import { SimpleOSPlugin } from "@/pages/api/getOSPlugins";
 
 export default function HomePage() {
   const [data, setData] = useState<SimplePlugin[]>();
+  const [oSPlugins, setOSPlugins] = useState<SimpleOSPlugin[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const [searchResults, setSearchResults] = useState<SimplePlugin[]>([]);
+  const [searchResults, setSearchResults] = useState<
+    SimplePlugin[] | SimpleOSPlugin[]
+  >([]);
   const [searchLoading, setSearchLoading] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [tabs, setTabs] = useState([
+    {
+      name: "Published Plugins",
+      href: "#",
+      current: true,
+      id: 0,
+    },
+    { name: "Open Source Plugins", href: "#", current: false, id: 1 },
+  ]);
+
+  const [activeTab, setActiveTab] = useState(0);
+
+  function handleTabClick(index: number) {
+    setTabs((prevTabs) =>
+      prevTabs.map((tab, idx) => ({ ...tab, current: idx === index }))
+    );
+    setActiveTab(index);
+  }
+
+  function classNames(...classes: string[]) {
+    return classes.filter(Boolean).join(" ");
+  }
 
   const fetchSearchResults = async (query: string) => {
     if (query.trim() === "") {
@@ -26,7 +54,9 @@ export default function HomePage() {
       return;
     }
     setSearchLoading(true);
-    const response = await fetch(`/api/search?q=${query}`);
+    const response = await fetch(
+      `/api/search?q=${query}&type=${activeTab == 0 ? "hosted" : "open"}`
+    );
     const data = await response.json();
     setSearchResults(data);
     setSearchLoading(false);
@@ -41,10 +71,20 @@ export default function HomePage() {
   useEffect(() => {
     if (!data) {
       setLoading(true);
-      fetch("/api/get").then((res) => {
+      fetch("/api/getPlugins").then((res) => {
         if (res.ok) {
           res.json().then((data) => {
             setData(data);
+          });
+        } else {
+          toast.error("Something went wrong");
+        }
+      });
+
+      fetch("/api/getOSPlugins").then((res) => {
+        if (res.ok) {
+          res.json().then((data) => {
+            setOSPlugins(data);
           });
         } else {
           toast.error("Something went wrong");
@@ -72,7 +112,13 @@ export default function HomePage() {
               onChange={handleInputChange}
               id="search-field"
               className="block bg-slate-100  h-full w-full border-0 py-4 rounded-md pl-12 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
-              placeholder={!data ? "" : `Search ${data?.length} plugins`}
+              placeholder={
+                !data
+                  ? ""
+                  : `Search ${
+                      activeTab == 0 ? data?.length : oSPlugins.length
+                    } plugins`
+              }
               disabled={!data}
               type="search"
               name="search"
@@ -90,33 +136,90 @@ export default function HomePage() {
           </div>
         </form>
 
-        <div className="mt-10 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 items-center">
-          {loading ? (
-            <>
-              <PluginCardSkeleton />
-              <PluginCardSkeleton />
-              <PluginCardSkeleton />
-            </>
-          ) : searchQuery.length > 0 ? (
-            searchResults?.map((plugin) => (
-              <PluginCard
-                key={plugin.id}
-                name={plugin.name}
-                description={plugin.description}
-                logo={plugin.logo}
-              />
-            ))
-          ) : (
-            data?.map((plugin) => (
-              <PluginCard
-                key={plugin.id}
-                name={plugin.name}
-                description={plugin.description}
-                logo={plugin.logo}
-              />
-            ))
-          )}
-        </div>
+        {!loading && (
+          <div className="mt-8">
+            <nav className="flex space-x-4" aria-label="Tabs">
+              {tabs.map((tab, index) => (
+                <a
+                  onClick={() => handleTabClick(index)}
+                  key={tab.name}
+                  href={tab.href}
+                  className={classNames(
+                    tab.current
+                      ? "bg-indigo-100 text-indigo-700"
+                      : "text-gray-500 hover:text-gray-700",
+                    "rounded-md px-3 py-2 text-sm font-medium"
+                  )}
+                  aria-current={tab.current ? "page" : undefined}
+                >
+                  {tab.name}
+                </a>
+              ))}
+            </nav>
+            {activeTab === 0 ? (
+              <div className="mt-10 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 items-center">
+                {loading ? (
+                  <>
+                    <PluginCardSkeleton />
+                    <PluginCardSkeleton />
+                    <PluginCardSkeleton />
+                  </>
+                ) : searchQuery.length > 0 ? (
+                  searchResults?.map((plugin) => (
+                    <PluginCard
+                      key={plugin.id}
+                      name={plugin.name}
+                      description={plugin.description}
+                      //@ts-expect-error
+                      logo={plugin?.logo}
+                    />
+                  ))
+                ) : (
+                  data?.map((plugin) => (
+                    <PluginCard
+                      key={plugin.id}
+                      name={plugin.name}
+                      description={plugin.description}
+                      logo={plugin.logo}
+                    />
+                  ))
+                )}
+              </div>
+            ) : (
+              <div className="mt-10 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 items-center">
+                {loading ? (
+                  <>
+                    <PluginCardSkeleton />
+                    <PluginCardSkeleton />
+                    <PluginCardSkeleton />
+                  </>
+                ) : searchQuery.length > 0 ? (
+                  searchResults?.map((plugin) => (
+                    <DevloperPluginCard
+                      key={plugin.id}
+                      name={plugin.name}
+                      description={plugin.description}
+                      //@ts-expect-error
+                      githubUrl={plugin.githubURL}
+                      //@ts-expect-error
+                      authorGithubUsername={plugin.githubURL.split("/")[3]}
+                    />
+                  ))
+                ) : (
+                  oSPlugins?.map((plugin) => (
+                    <DevloperPluginCard
+                      key={plugin.id}
+                      name={plugin.name}
+                      description={plugin.description}
+                      githubUrl={plugin.githubURL}
+                      authorGithubUsername={plugin.githubURL.split("/")[3]}
+                    />
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </main>
       <Toaster />
       <Footer />

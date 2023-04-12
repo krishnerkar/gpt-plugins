@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import {
@@ -9,7 +8,7 @@ import {
   PluginDialogHeader,
 } from "@/components/ui/PluginDialog";
 import { useCallback, useEffect, useState } from "react";
-import { SimplePlugin } from "@/pages/api/get";
+import { SimplePlugin } from "@/pages/api/getPlugins";
 import { Result } from "@/pages/api/getByName";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { useRouter } from "next/navigation";
@@ -25,7 +24,7 @@ export default function PhotoModal({ params }: { params: { name: string } }) {
 
   const router = useRouter();
 
-  const name = params.name
+  const name = params.name;
 
   const closeModal = useCallback(() => {
     router.back();
